@@ -17,6 +17,7 @@ public class Principal {
         int j = 1;
         System.out.println("i++ = " + i++);
         System.out.println("++j = " + ++j);
+        System.out.println("Teste de acesso Alexsandro");
     }
     
 }
