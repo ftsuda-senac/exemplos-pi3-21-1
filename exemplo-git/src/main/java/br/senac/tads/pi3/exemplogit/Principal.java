@@ -31,6 +31,8 @@ public class Principal {
             System.out.println("" + tab + " x " + k + " = " + tab * k);
         }
         System.out.println("Alteração 2 - Alexsandro");
+        
+        System.out.println("Mais uma mensagem");
     }
     
 }
