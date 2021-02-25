@@ -13,6 +13,8 @@ public class Principal {
         System.out.println("Projeto exemplo-git");
         System.out.println("================");
         
+        System.out.println("Teste");
+        
         int i = 1;
         int j = 1;
         System.out.println("i++ = " + i++);

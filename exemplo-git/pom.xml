@@ -5,6 +5,22 @@
     <artifactId>exemplo-git</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    
+    <organization>
+        <name>Senac TADS PI3 - 21-1</name>
+    </organization>
+    
+    <developers>
+        <developer>
+            <id>ftsuda-senac</id>
+            <name>Fernando Tsuda</name>
+        </developer>
+        <developer>
+            <id>alexsandro88</id>
+            <name>Alexsandro</name>
+        </developer>
+    </developers>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
