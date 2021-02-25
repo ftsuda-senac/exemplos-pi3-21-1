@@ -17,6 +17,7 @@ public class Principal {
         int j = 1;
         System.out.println("i++ = " + i++);
         System.out.println("++j = " + ++j);
+        System.out.println("Teste de acesso Alexsandro");
         System.out.println("Tabuada do 9");
         for (int k = 1; k < 11; k++) {
             System.out.println("9 x " + k + " = " + k*9);
