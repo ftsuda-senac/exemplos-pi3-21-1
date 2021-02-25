@@ -23,9 +23,8 @@ public class Principal {
         System.out.println("Tabuada do 9");
         for (int k = 1; k < 11; k++) {
             System.out.println("9 x " + k + " = " + k*9);
-            
-            System.out.println("Alteração 2 - Alexsandro");
         }
+        System.out.println("Alteração 2 - Alexsandro");
     }
     
 }
