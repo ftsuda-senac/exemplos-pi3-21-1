@@ -7,7 +7,9 @@ package br.senac.tads.pi3.exemploweb;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +25,9 @@ public class ExemploServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html");
+        
+        String valorRecebido = request.getParameter("nome");
+        String dataRecebida = request.getParameter("data");
 
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
@@ -33,6 +38,12 @@ public class ExemploServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Exemplo Servlet</h1>");
+            out.println("<h2>Nome: " + valorRecebido + "</h2>");
+            if (dataRecebida != null) {
+                out.println("<h2>Data nascimento: " + dataRecebida + "</h2>");
+                long idade = ChronoUnit.YEARS.between(LocalDate.parse(dataRecebida), LocalDate.now());
+                out.println("<h2>Idade: " + idade + "</h2>");
+            }
             out.println("<p>Data e hora atual: " + LocalDateTime.now() + "</p>");
             out.println("</body>");
             out.println("</html>");
