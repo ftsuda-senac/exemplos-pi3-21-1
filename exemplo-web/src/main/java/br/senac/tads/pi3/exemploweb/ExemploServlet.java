@@ -45,6 +45,13 @@ public class ExemploServlet extends HttpServlet {
                 out.println("<h2>Idade: " + idade + "</h2>");
             }
             out.println("<p>Data e hora atual: " + LocalDateTime.now() + "</p>");
+            out.println("<div>");
+            for (int i = 0; i < 20; i++) {
+                out.println("<div style=\"display: flex\">");
+                out.println("<div><img src=\"https://picsum.photos/200\" /></div>");
+                out.println("<div><h3>Item " + i + "</h3><p>Bla bla bla</p></div>");
+            }
+            out.println("</div>");
             out.println("</body>");
             out.println("</html>");
         }
