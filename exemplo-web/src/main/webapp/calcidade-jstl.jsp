@@ -1,6 +1,7 @@
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.time.temporal.ChronoUnit"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,8 +9,7 @@
         <title>Calculo Idade</title>
     </head>
     <body>
-        <h1>Calculo Idade - Scriplet</h1>
-        <p style="color: red;">ATENÇÃO: SCRIPTLET NÃO PODEM SER USADOS NO PROJETO</p>
+        <h1>Calculo Idade - JSTL + EL</h1>
         <%
             String nome = request.getParameter("nome");
             String dataNascimento = request.getParameter("data");
@@ -17,11 +17,14 @@
             if (dataNascimento != null) {
                 idade = ChronoUnit.YEARS.between(LocalDate.parse(dataNascimento), LocalDate.now());
             }
+            request.setAttribute("nomeAttr", nome);
+            request.setAttribute("dtNascAttr", dataNascimento);
+            request.setAttribute("idadeAttr", idade);
         %>
-        <h1>Nome: <%= nome %></h1>
-        <h2>Data de nascimento: <%= dataNascimento %></h2>
-        <% if (idade > 0) { %>
-        <h2>Idade: <%= idade %>
-        <% } %>
+        <h1>Nome: <c:out value="${nomeAttr}" /></h1>
+        <h2>Data de nascimento: <c:out value="${dtNascAttr}" /></h2>
+        <c:if test="${idadeAttr > 0}">
+            <h2>Idade: <c:out value="${idadeAttr}" /></h2>
+        </c:if>
     </body>
 </html>

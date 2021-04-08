@@ -50,6 +50,7 @@ public class ExemploServlet extends HttpServlet {
                 out.println("<div style=\"display: flex\">");
                 out.println("<div><img src=\"https://picsum.photos/200\" /></div>");
                 out.println("<div><h3>Item " + i + "</h3><p>Bla bla bla</p></div>");
+                out.println("</div>");
             }
             out.println("</div>");
             out.println("</body>");
