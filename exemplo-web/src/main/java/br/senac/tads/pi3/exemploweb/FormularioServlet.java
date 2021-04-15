@@ -7,6 +7,8 @@ package br.senac.tads.pi3.exemploweb;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +26,10 @@ public class FormularioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        List<String> interesses = Arrays.asList("Tecnologia", "Gastronomia", "Viagens", "Esportes", "Investimentos");
+        
+        request.setAttribute("interesses", interesses);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/formulario.jsp");
         dispatcher.forward(request, response);
     }
