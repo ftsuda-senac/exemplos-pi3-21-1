@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "FormularioSalvarServlet", urlPatterns = {"/formulario-salvar"})
 public class FormularioSalvarServlet extends HttpServlet {
@@ -149,8 +150,15 @@ public class FormularioSalvarServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/formulario-validacao.jsp");
             dispatcher.forward(request, response);
         } else {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/resultado.jsp");
-            dispatcher.forward(request, response);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/resultado.jsp");
+//            dispatcher.forward(request, response);
+
+            // **** POST-REDIRECT-GET
+            
+            HttpSession sessao = request.getSession();
+            sessao.setAttribute("dados", dados);
+
+            response.sendRedirect(request.getContextPath() + "/resultado");
         }
 
     }
