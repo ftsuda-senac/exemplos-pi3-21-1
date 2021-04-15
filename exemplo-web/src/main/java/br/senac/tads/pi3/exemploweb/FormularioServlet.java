@@ -28,9 +28,8 @@ public class FormularioServlet extends HttpServlet {
             throws ServletException, IOException {
         
         List<String> interesses = Arrays.asList("Tecnologia", "Gastronomia", "Viagens", "Esportes", "Investimentos");
-        
         request.setAttribute("interesses", interesses);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/formulario-validacao.jsp");
         dispatcher.forward(request, response);
     }
 

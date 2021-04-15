@@ -6,11 +6,11 @@
 package br.senac.tads.pi3.exemploweb;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,7 +33,7 @@ public class FormularioSalvarServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-        
+
         String idStr = request.getParameter("id");
         String nome = request.getParameter("nome");
         String descricao = request.getParameter("descricao");
@@ -47,36 +47,112 @@ public class FormularioSalvarServlet extends HttpServlet {
         String pesoStr = request.getParameter("peso");
         String generoStr = request.getParameter("genero");
         String[] interesses = request.getParameterValues("interesses");
-        
-        DadosPessoais dados = new DadosPessoais(Integer.parseInt(idStr), nome, descricao,
-            LocalDate.parse(dataNascimentoStr), email, telefone,
-            senha, senhaRepetida, Integer.parseInt(numeroStr),
-            new BigDecimal(alturaStr), new BigDecimal(pesoStr), Integer.parseInt(generoStr),
-            Arrays.asList(interesses));
-        
-        request.setAttribute("dados", dados);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/resultado.jsp");
-        dispatcher.forward(request, response);
-        
-        // DESCOMENTAR CÓDIGO ABAIXO PARA VER EXEMPLO DE TABELA/LISTA
-        /*
-        DadosPessoais dados2 = new DadosPessoais(333, "Ciclano", "teste",
-            LocalDate.parse("2000-01-20"), "ciclano@teste.com.br", "(11) 99991-1122",
-            "abcd1234", "abcd1234", 25,
-            new BigDecimal("1.81"), new BigDecimal("90.2"), 1,
-            Arrays.asList("Tecnologia"));
-        DadosPessoais dados3 = new DadosPessoais(987, "Beltrana", "teste",
-            LocalDate.parse("1999-04-29"), "beltrana@teste.com.br", "(11) 99992-2233",
-            "abcd1234", "abcd1234", 54,
-            new BigDecimal("1.75"), new BigDecimal("87.2"), 0,
-            Arrays.asList("Viagens"));
-        
-        List<DadosPessoais> listaPessoas = Arrays.asList(dados, dados2, dados3);
 
-        request.setAttribute("lista", listaPessoas);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/resultado-tabela.jsp");
-        dispatcher.forward(request, response);
-    */
+        // VALIDACOES E CONVERSÕES
+        boolean temErro = false;
+
+        Integer id = null;
+        if (idStr != null && idStr.trim().length() > 0) {
+            try {
+                id = Integer.parseInt(idStr);
+            } catch (NumberFormatException ex) {
+                // Mantém id null
+            }
+        }
+
+        if (nome == null || nome.trim().length() == 0) {
+            temErro = true;
+            request.setAttribute("erroNome", "Nome não preenchido");
+        }
+
+        if (email == null || email.trim().length() == 0) {
+            temErro = true;
+            request.setAttribute("erroEmail", "E-mail não preenchido");
+        }
+
+        LocalDate dataNascimento = null;
+        if (dataNascimentoStr != null && dataNascimentoStr.trim().length() > 0) {
+            try {
+                dataNascimento = LocalDate.parse(dataNascimentoStr);
+                if (dataNascimento.isAfter(LocalDate.now())) {
+                    // ERRO - dataNascimento no futuro;
+                    temErro = true;
+                    request.setAttribute("erroDataNascimento", "Data de nascimento inválida - está no futuro");
+                }
+            } catch (DateTimeParseException ex) {
+                // Mantém dataNascimento null
+                temErro = true;
+                request.setAttribute("erroDataNascimento", "Data de nascimento inválida - formato inválido");
+            }
+        }
+        
+        if (senha != null && senha.trim().length() > 0) {
+            if (!senha.equals(senhaRepetida)) {
+                temErro = true;
+                request.setAttribute("erroSenha", "Senha e repetição são diferentes");
+            }
+        } else {
+            temErro = true;
+            request.setAttribute("erroSenha", "O preenchimento da senha é obrigatório");
+        }
+
+        int numero = 0;
+        if (numeroStr != null && numeroStr.trim().length() > 0) {
+            try {
+                numero = Integer.parseInt(numeroStr);
+                if (numero < 1) {
+                    temErro = true;
+                    request.setAttribute("erroNumero", "Número é menor do que 1");
+                } else if (numero > 99) {
+                    temErro = true;
+                    request.setAttribute("erroNumero", "Número é maior do que 99");
+                }
+            } catch (NumberFormatException ex) {
+                temErro = true;
+                request.setAttribute("erroNumero", "Valor informado é inválido");
+            }
+        } else {
+            temErro = true;
+            request.setAttribute("erroNumero", "Número não preenchido");
+        }
+
+        BigDecimal altura = null;
+        if (alturaStr != null && alturaStr.trim().length() > 0) {
+            try {
+                altura = new BigDecimal(alturaStr);
+            } catch (NumberFormatException ex) {
+                // Mantem altura null
+            }
+        }
+
+        BigDecimal peso = null;
+        if (pesoStr != null && pesoStr.trim().length() > 0) {
+            try {
+                peso = new BigDecimal(pesoStr);
+            } catch (NumberFormatException ex) {
+                // Mantem altura null
+            }
+        }
+
+        DadosPessoais dados = new DadosPessoais(id, nome, descricao,
+                dataNascimento, email, telefone,
+                senha, senhaRepetida, numero,
+                altura, peso, Integer.parseInt(generoStr),
+                Arrays.asList(interesses));
+
+        request.setAttribute("dados", dados);
+
+        // Verificar se houve algum erro na validação
+        if (temErro) {
+            List<String> interessesOpcoes = Arrays.asList("Tecnologia", "Gastronomia", "Viagens", "Esportes", "Investimentos");
+            request.setAttribute("interesses", interessesOpcoes);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/formulario-validacao.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/resultado.jsp");
+            dispatcher.forward(request, response);
+        }
+
     }
 
 }
